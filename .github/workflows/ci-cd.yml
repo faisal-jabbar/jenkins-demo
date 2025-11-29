@@ -12,35 +12,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ---------------------
-      # 1) Node.js Dependency Setup
-      # ---------------------
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Node Dependencies
-        run: |
-          echo "📦 Installing npm dependencies..."
-          npm install
-
-      # ---------------------
-      # 2) Python Dependencies
-      # ---------------------
+      # Python example (optional)
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install Python Dependencies
+        if: ${{ hashFiles('requirements.txt') != '' }}
         run: |
           echo "🐍 Installing Python dependencies..."
           pip install -r requirements.txt
 
-      # ---------------------
-      # 3) Maven (Java) Dependencies
-      # ---------------------
+      # Java/Maven example
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -48,18 +32,15 @@ jobs:
           java-version: "17"
 
       - name: Install Maven Dependencies
+        if: ${{ hashFiles('pom.xml') != '' }}
         run: |
           echo "☕ Installing Maven dependencies..."
           mvn install -DskipTests
 
-      # ---------------------
-      # Build Step
-      # ---------------------
       - name: Build
         run: |
           echo "🔨 Building the project..."
           echo "This is the build step"
-
 
   test:
     runs-on: ubuntu-latest
@@ -71,7 +52,6 @@ jobs:
         run: |
           echo "🧪 Running tests..."
           echo "This is the test step"
-
 
   deploy:
     runs-on: ubuntu-latest
